@@ -1,10 +1,8 @@
-from django.http import HttpResponse
 from rest_framework import status
-from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-from rest_framework.decorators import action
-
 from apps.core.model_view_set import BaseModelViewSet
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
 
 
 class MessageViewSet(BaseModelViewSet):
@@ -14,7 +12,15 @@ class MessageViewSet(BaseModelViewSet):
         return response
 
     def create(self, request, *args, **kwargs):
-        renderer = JSONRenderer()
-        data = renderer.render({"message": "SUCCESS."})
-
-        return HttpResponse(data, "application/json", status=status.HTTP_200_OK)
+        device = FCMDevice.objects.all().first()
+        message = Message(
+            data={"title": "Mario", "body": "great match!", "Room": "PortugalVSDenmark"},
+        )
+        try:
+            device.send_message(message)
+            data = {"message": "Message sent successfully"}
+            response = Response(data=data, status=status.HTTP_200_OK)
+        except Exception as e:
+            data = {"error": str(e)}
+            response = Response(data=data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return response

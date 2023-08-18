@@ -13,3 +13,4 @@ static/
 **/celerybeat.pid
 **/postgres-data-dev
 .env
+keys
