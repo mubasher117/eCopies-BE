@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8010
+    ports:
+      - 8010:8010
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: kartoza/postgis:11.0-2.5
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5433:5433
+    volumes:
+      - ./postgres-data-dev:/var/lib/postgresql/
+
