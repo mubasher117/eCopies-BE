@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 class JWTAuthentication(JSONWebTokenAuthentication):
-    keyword = api_settings.JWT_AUTH_HEADER_PREFIX
+    keyword = 'Bearer'
 
     def get_jwt_value(self, request):
         auth = get_authorization_header(request).split()

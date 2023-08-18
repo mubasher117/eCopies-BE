@@ -25,6 +25,7 @@ INSTALLED_APPS = [
 
     'apps.user',
     'apps.authentication',
+    'apps.message',
 
     'drf_yasg',
     'corsheaders',
